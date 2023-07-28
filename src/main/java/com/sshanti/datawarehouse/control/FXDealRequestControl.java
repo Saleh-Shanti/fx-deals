@@ -90,7 +90,7 @@ public class FXDealRequestControl {
     }
 
     private FXDealDTO convertFXDealToDTO(FXDeal deal) {
-        return new FXDealDTO(deal);
+        return deal == null ? null : new FXDealDTO(deal);
     }
 
 
