@@ -8,8 +8,10 @@ import jakarta.enterprise.context.RequestScoped;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.slf4j.Logger;
@@ -38,8 +40,27 @@ public class FXDealImporterResource {
             return fxDealRequestControl.importFXDeal(fxDealRequest);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return FXDealResponseBuilder.badRequest(
-                    new FXDealResponse(Collections.singletonList(e.getMessage()), Response.Status.BAD_REQUEST.getReasonPhrase()));
+            return FXDealResponseBuilder.serverError(
+                    new FXDealResponse(Collections.singletonList(e.getMessage()), Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase()));
+        }
+    }
+
+    @GET
+    @Path("/{dealId}")
+    @Operation(
+            hidden = true,
+            summary = "Get forex deal by ID.",
+            description = "Used to retrieve a forex deal by its ID.")
+    public Response getFXDealById(@PathParam("dealId") Long dealId) {
+        try {
+
+            logger.info("New get FX deal by id request has been received");
+            return fxDealRequestControl.getFXDealById(dealId);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return FXDealResponseBuilder.serverError(
+                    new FXDealResponse(Collections.singletonList(e.getMessage()), Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase()));
         }
     }
 
