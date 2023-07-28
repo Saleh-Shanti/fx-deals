@@ -2,6 +2,7 @@ package com.sshanti.datawarehouse.control;
 
 import com.sshanti.datawarehouse.boundary.FXDealResponse;
 import com.sshanti.datawarehouse.boundary.request.FXDealRequest;
+import com.sshanti.datawarehouse.dto.FXDealDTO;
 import com.sshanti.datawarehouse.entity.FXDeal;
 
 import com.sshanti.datawarehouse.service.CrudService;
@@ -50,9 +51,33 @@ public class FXDealRequestControl {
             return FXDealResponseBuilder.badRequest(new FXDealResponse(fe.getErrorMessages(), Response.Status.BAD_REQUEST.getReasonPhrase()));
         } catch (Exception e) {
             logger.warn(e.getMessage(), e);
-            return FXDealResponseBuilder.badRequest(new FXDealResponse(Collections.singletonList(e.getMessage()), Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase()));
+            return FXDealResponseBuilder.serverError(new FXDealResponse(Collections.singletonList(e.getMessage()), Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase()));
         }
 
+    }
+
+    public Response getFXDealById(Long dealId) {
+        if (dealId == null || !(dealId instanceof Long) || dealId <= 0) {
+            logger.info(String.format("Invalid deal Id has been provided.", dealId));
+            return FXDealResponseBuilder.badRequest(new FXDealResponse(Collections.singletonList("Invalid deal Id"), Response.Status.BAD_REQUEST.getReasonPhrase()));
+        }
+        try {
+
+            FXDealDTO fxDeal = convertFXDealToDTO(fxDealService.getById(FXDeal.class, dealId));
+
+            if (fxDeal == null) {
+                logger.info(String.format("FX Deal with id [%d] not found.", dealId));
+                return FXDealResponseBuilder.notFound(new FXDealResponse(Collections.singletonList("FX deal not found"), Response.Status.NOT_FOUND.getReasonPhrase()));
+            }
+
+            logger.info(String.format("FX Deal [%d] has been retrieved.", dealId));
+            return FXDealResponseBuilder.successRequest(fxDeal, Response.Status.OK.getReasonPhrase());
+
+
+        } catch (Exception e) {
+            logger.warn(e.getMessage(), e);
+            return FXDealResponseBuilder.serverError(new FXDealResponse(Collections.singletonList(e.getMessage()), Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase()));
+        }
     }
 
     private FXDeal convertFXRequestToFXDeal(FXDealRequest request) {
@@ -63,4 +88,10 @@ public class FXDealRequestControl {
         deal.setAmount(request.getAmount());
         return deal;
     }
+
+    private FXDealDTO convertFXDealToDTO(FXDeal deal) {
+        return new FXDealDTO(deal);
+    }
+
+
 }

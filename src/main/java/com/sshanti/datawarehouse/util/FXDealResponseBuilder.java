@@ -1,6 +1,7 @@
 package com.sshanti.datawarehouse.util;
 
 import com.sshanti.datawarehouse.boundary.FXDealResponse;
+import com.sshanti.datawarehouse.dto.FXDealDTO;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -15,6 +16,27 @@ public class FXDealResponseBuilder {
     public static Response successRequest(FXDealResponse fxDealResponse) {
         return Response.status(Response.Status.OK)
                 .entity(fxDealResponse)
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .build();
+    }
+
+    public static Response serverError(FXDealResponse fxDealResponse) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(fxDealResponse)
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .build();
+    }
+
+    public static Response successRequest(FXDealDTO fxDeal, String reasonPhrase) {
+        return Response.status(Response.Status.OK)
+                .entity(fxDeal)
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .build();
+    }
+
+    public static Response notFound(FXDealResponse fxDeal) {
+        return Response.status(Response.Status.OK)
+                .entity(fxDeal)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
