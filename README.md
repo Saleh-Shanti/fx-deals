@@ -18,7 +18,7 @@ The project is built using Quarkus, a Java framework for building cloud-native a
 Before running the project, ensure you have the following installed on your system:
 
 - Java Development Kit (JDK) 11 or higher
-- Maven 3.8.*
+- Maven 3.8.* or higher
 - Docker (with Docker Compose support) optional
 - PostgreSQL database
 
