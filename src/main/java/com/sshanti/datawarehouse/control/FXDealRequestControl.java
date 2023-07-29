@@ -67,11 +67,11 @@ public class FXDealRequestControl {
 
             if (fxDeal == null) {
                 logger.info(String.format("FX Deal with id [%d] not found.", dealId));
-                return FXDealResponseBuilder.notFound(new FXDealResponse(Collections.singletonList("FX deal not found"), Response.Status.NOT_FOUND.getReasonPhrase()));
+                return FXDealResponseBuilder.notFound("FX deal not found");
             }
 
             logger.info(String.format("FX Deal [%d] has been retrieved.", dealId));
-            return FXDealResponseBuilder.successRequest(fxDeal, Response.Status.OK.getReasonPhrase());
+            return FXDealResponseBuilder.successRequest(fxDeal);
 
 
         } catch (Exception e) {

@@ -27,16 +27,16 @@ public class FXDealResponseBuilder {
                 .build();
     }
 
-    public static Response successRequest(FXDealDTO fxDeal, String reasonPhrase) {
+    public static Response successRequest(FXDealDTO fxDeal) {
         return Response.status(Response.Status.OK)
                 .entity(fxDeal)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
 
-    public static Response notFound(FXDealResponse fxDeal) {
-        return Response.status(Response.Status.OK)
-                .entity(fxDeal)
+    public static Response notFound(String fxDealNotFoundMessage) {
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(fxDealNotFoundMessage)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
